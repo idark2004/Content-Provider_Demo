@@ -15,7 +15,7 @@ public class ViewTypeActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_type);
-        txtResult = findViewById(R.id.txtResutl);
+        txtResult = findViewById(R.id.txtResult);
         typeProvider = new TypeProvider();
         Cursor cr = getContentResolver().query(typeProvider.CONTENT_URI,null,null,null,"_id");
         StringBuilder stringBuilder = new StringBuilder();

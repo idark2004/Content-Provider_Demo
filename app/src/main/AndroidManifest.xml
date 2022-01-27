@@ -10,6 +10,19 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.FinalProduct">
         <activity
+            android:name=".ViewDeviceActivity"
+            android:exported="false" />
+        <activity
+            android:name=".CreateDeviceActivity"
+            android:exported="false" />
+
+        <provider
+            android:name=".DeviceProvider"
+            android:authorities="com.demo.contentprovider.provider"
+            android:enabled="true"
+            android:exported="true" />
+
+        <activity
             android:name=".ViewTypeActivity"
             android:exported="false" />
 

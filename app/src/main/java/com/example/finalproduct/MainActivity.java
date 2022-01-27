@@ -74,9 +74,13 @@ public class MainActivity extends AppCompatActivity implements ActionBar.TabList
     }
 
     public void clickToInsertDevice(View view) {
+        Intent intent = new Intent(this, CreateDeviceActivity.class);
+        startActivity(intent);
     }
 
     public void clickToViewDevice(View view) {
+        Intent intent = new Intent(this, ViewDeviceActivity.class);
+        startActivity(intent);
     }
 
     public void clickToUpdateDevice(View view) {
