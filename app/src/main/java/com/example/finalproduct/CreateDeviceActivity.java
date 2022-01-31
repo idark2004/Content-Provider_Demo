@@ -20,9 +20,18 @@ class Type {
     private int id;
     private String name;
 
+    @Override
+    public String toString() {
+        return this.name;
+    }
+
     public Type(int id, String name) {
         this.id = id;
         this.name = name;
+    }
+
+    public int getId() {
+        return id;
     }
 }
 
@@ -32,7 +41,8 @@ public class CreateDeviceActivity extends AppCompatActivity {
     ContentValues values = new ContentValues();
     DeviceProvider deviceProvider;
     TypeProvider typeProvider;
-    String selectedSpinner;
+    Type selectedType;
+    int selectedTypeId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,38 +52,40 @@ public class CreateDeviceActivity extends AppCompatActivity {
         edtDeviceQuantity = findViewById(R.id.edtDeviceQuantity);
         spDeviceType = findViewById(R.id.spinnerDeviceType);
 
+        //get the list of type
         Cursor cr = getContentResolver().query(typeProvider.CONTENT_URI,null,null,null,"_id");
         StringBuilder stringBuilder = new StringBuilder();
         List<Type> lstType = new ArrayList<>();
-        List<String> lstTypeName = new ArrayList<>();
 
         while(cr.moveToNext()){
             int id = cr.getInt(0);
             String name = cr.getString(1);
             lstType.add(new Type(id, name));
-            lstTypeName.add(name);
         }
-        ArrayAdapter<String> adapter = new ArrayAdapter(this, android.R.layout.simple_spinner_item, lstTypeName);
+        //for the spinner display
+        ArrayAdapter<Type> adapter = new ArrayAdapter(this, android.R.layout.simple_spinner_item, lstType);
+        //specify the layout of the dropdown list
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        //apply the adapter to the spinner
         spDeviceType.setAdapter(adapter);
+        //responding to the user selection
         spDeviceType.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                selectedSpinner = spDeviceType.getSelectedItem().toString();
+                selectedType = (Type) spDeviceType.getSelectedItem();
+                selectedTypeId = selectedType.getId();
             }
 
             @Override
             public void onNothingSelected(AdapterView<?> adapterView) {
-
             }
         });
-        deviceProvider = new DeviceProvider();
     }
 
     public void clickToInsertDevice(View view) {
         values.put("name", edtDeviceName.getText().toString());
         values.put("quantity", edtDeviceQuantity.getText().toString());
-        values.put("type", selectedSpinner.toString());
+        values.put("typeId", selectedTypeId);
 
         Uri uri = getContentResolver().insert(deviceProvider.CONTENT_URI,values);
         Toast.makeText(this, uri.toString(), Toast.LENGTH_LONG).show();

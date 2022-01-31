@@ -18,7 +18,7 @@
 
         <provider
             android:name=".DeviceProvider"
-            android:authorities="com.demo.contentprovider.provider"
+            android:authorities="com.demo.device.provider"
             android:enabled="true"
             android:exported="true" />
 

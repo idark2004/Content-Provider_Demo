@@ -45,7 +45,9 @@ public class TypeProvider extends ContentProvider {
 
         @Override
         public void onCreate(SQLiteDatabase sqLiteDatabase) {
-            sqLiteDatabase.execSQL("create table if not exists "+DB_TABLE+" (_id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT NOT NULL)");
+            sqLiteDatabase.execSQL("create table if not exists " + DB_TABLE + " " +
+                    "(_id INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                    "name TEXT NOT NULL)");
         }
 
         @Override
@@ -83,6 +85,7 @@ public class TypeProvider extends ContentProvider {
         // TODO: Implement this to initialize your content provider on startup.
         MyDatabase myHelper = new MyDatabase(getContext());
         myDB = myHelper.getWritableDatabase();
+//        System.out.println("Type--------------- " + myDB != null);
         if(myDB != null){
             return true;
         } else {

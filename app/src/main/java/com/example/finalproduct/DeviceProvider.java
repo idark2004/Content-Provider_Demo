@@ -18,7 +18,7 @@ public class DeviceProvider extends ContentProvider {
     private static final String DB_TABLE = "device";
     private static final int DB_VER = 1;
 
-    public static final String AUTHORITY = "com.demo.contentprovider.provider";
+    public static final String AUTHORITY = "com.demo.device.provider";
     public static final String CONTENT_PATH = "";
     public static final Uri CONTENT_URI = Uri.parse("content://" +AUTHORITY+"/"+DB_TABLE);
 
@@ -28,9 +28,9 @@ public class DeviceProvider extends ContentProvider {
     static UriMatcher myUri = new UriMatcher(UriMatcher.NO_MATCH);
     static {
         //access the whole table
-        myUri.addURI(AUTHORITY,"type",DEVICE);
+        myUri.addURI(AUTHORITY,"device",DEVICE);
         //access specific row
-        myUri.addURI(AUTHORITY,"type/#",DEVICE_ROW);
+        myUri.addURI(AUTHORITY,"device/#",DEVICE_ROW);
     }
 
     public DeviceProvider() {
@@ -43,7 +43,24 @@ public class DeviceProvider extends ContentProvider {
 
         @Override
         public void onCreate(SQLiteDatabase sqLiteDatabase) {
-            sqLiteDatabase.execSQL("create table if not exists "+DB_TABLE+" (_id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT NOT NULL)");
+            try {
+                sqLiteDatabase.execSQL("create table if not exists " + DB_TABLE + " " +
+                        "(_id INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                        "name TEXT NOT NULL, " +
+                        "quantity INTEGER NOT NULL, " +
+                        "typeId INTEGER NOT NULL)");
+            }
+            catch (Exception ex) {
+                ex.printStackTrace();
+            }
+
+
+            //query with "type" foreign key
+//            sqLiteDatabase.execSQL("create table if not exists "+DB_TABLE+"" +
+//                    " (_id INTEGER PRIMARY KEY AUTOINCREMENT, " +
+//                    "name TEXT NOT NULL, " +
+//                    "quantity INTEGER NOT NULL, " +
+//                    "FOREIGN KEY (typeId) REFERENCES type(id)");
         }
 
         @Override
@@ -78,8 +95,11 @@ public class DeviceProvider extends ContentProvider {
 
     @Override
     public boolean onCreate() {
-        DeviceProvider.MyDatabase myHelper = new DeviceProvider.MyDatabase(getContext());
+        MyDatabase myHelper = new MyDatabase(getContext());
+        // This line will trigger the onCreate above
         myDB = myHelper.getWritableDatabase();
+        // Return the result
+        System.out.println("--------------- " + myDB != null);
         if(myDB != null){
             return true;
         } else {
@@ -87,12 +107,17 @@ public class DeviceProvider extends ContentProvider {
         }
     }
 
+    // This method must return a cursor obj, or an Exception if fails
+    /* Cursor class is an instance using which you can invoke methods that execute SQLite statements,
+      fetch data from the result sets of the queries */
     @Override
     public Cursor query(Uri uri, String[] projection, String selection,
                         String[] selectionArgs, String sortOrder) {
         SQLiteQueryBuilder myQuery = new SQLiteQueryBuilder();
         myQuery.setTables(DB_TABLE);
 
+        /* By creating this cursor, you can use Cursor implemented methods
+        to access the content of the database in Activities */
         Cursor cr = myQuery.query(myDB,null,null,null,null,null,"_id");
         cr.setNotificationUri((getContext().getContentResolver()),uri);
         return cr;
