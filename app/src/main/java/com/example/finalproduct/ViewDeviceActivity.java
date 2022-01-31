@@ -7,7 +7,6 @@ import android.os.Bundle;
 import android.widget.TextView;
 
 public class ViewDeviceActivity extends AppCompatActivity {
-    DeviceProvider deviceProvider;
     TextView txtAllDevices;
 
     @Override
@@ -15,8 +14,7 @@ public class ViewDeviceActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_device);
         txtAllDevices = findViewById(R.id.txtAllDevices);
-        deviceProvider = new DeviceProvider();
-        Cursor cr = getContentResolver().query(deviceProvider.CONTENT_URI,null,null,null,"_id");
+        Cursor cr = getContentResolver().query(DeviceProvider.CONTENT_URI,null,null,null,"_id");
         StringBuilder stringBuilder = new StringBuilder();
 
         while(cr.moveToNext()){

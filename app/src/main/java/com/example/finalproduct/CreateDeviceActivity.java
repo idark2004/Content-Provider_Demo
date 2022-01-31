@@ -39,8 +39,6 @@ public class CreateDeviceActivity extends AppCompatActivity {
     EditText edtDeviceName, edtDeviceQuantity;
     Spinner spDeviceType;
     ContentValues values = new ContentValues();
-    DeviceProvider deviceProvider;
-    TypeProvider typeProvider;
     Type selectedType;
     int selectedTypeId;
 
@@ -53,7 +51,7 @@ public class CreateDeviceActivity extends AppCompatActivity {
         spDeviceType = findViewById(R.id.spinnerDeviceType);
 
         //get the list of type
-        Cursor cr = getContentResolver().query(typeProvider.CONTENT_URI,null,null,null,"_id");
+        Cursor cr = getContentResolver().query(TypeProvider.CONTENT_URI,null,null,null,"_id");
         StringBuilder stringBuilder = new StringBuilder();
         List<Type> lstType = new ArrayList<>();
 
@@ -87,7 +85,7 @@ public class CreateDeviceActivity extends AppCompatActivity {
         values.put("quantity", edtDeviceQuantity.getText().toString());
         values.put("typeId", selectedTypeId);
 
-        Uri uri = getContentResolver().insert(deviceProvider.CONTENT_URI,values);
+        Uri uri = getContentResolver().insert(DeviceProvider.CONTENT_URI,values);
         Toast.makeText(this, uri.toString(), Toast.LENGTH_LONG).show();
     }
 }

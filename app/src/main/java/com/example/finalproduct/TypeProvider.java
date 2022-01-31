@@ -45,6 +45,7 @@ public class TypeProvider extends ContentProvider {
 
         @Override
         public void onCreate(SQLiteDatabase sqLiteDatabase) {
+            System.out.println("Type table was created");
             sqLiteDatabase.execSQL("create table if not exists " + DB_TABLE + " " +
                     "(_id INTEGER PRIMARY KEY AUTOINCREMENT, " +
                     "name TEXT NOT NULL)");
