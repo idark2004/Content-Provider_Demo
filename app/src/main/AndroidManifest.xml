@@ -10,6 +10,12 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.FinalProduct">
         <activity
+            android:name=".UpdateDeviceActivity"
+            android:exported="false" />
+        <activity
+            android:name=".DeleteDeviceActivity"
+            android:exported="false" />
+        <activity
             android:name=".ViewDeviceActivity"
             android:exported="false" />
         <activity

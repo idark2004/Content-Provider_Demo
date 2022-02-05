@@ -10,19 +10,31 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.database.sqlite.SQLiteQueryBuilder;
 import android.net.Uri;
+import android.text.TextUtils;
 
 public class DeviceProvider extends ContentProvider {
     SQLiteDatabase myDB;
 
+    // Information of the DB
     private static final String DB_NAME = "goods";
     private static final String DB_TABLE = "device";
     private static final int DB_VER = 1;
+    private static final String KEY_ID = "_id";
+    private static final String KEY_NAME = "name";
+    private static final String KEY_QUANTITY = "quantity";
+    private static final String KEY_TYPEID = "typeId";
 
+
+    /* Anatomy of an URI: content://authority/path/id
+        + "content://": the start of an URI
+        + "authority" : the symbolic name of the entire provider (should be the package name)
+        + "path"      : the virtual directory within the provider that acts as an identifier of the requested data
+        + "id"        : optional, specifies the primary key of a record being requested */
     public static final String AUTHORITY = "com.demo.device.provider";
     public static final String CONTENT_PATH = "";
     public static final Uri CONTENT_URI = Uri.parse("content://" +AUTHORITY+"/"+DB_TABLE);
 
-    // These variables are for the declaration of the UriMatcher class var   below
+    // These variables are for the declaration of the UriMatcher class var below
     static int DEVICE = 1;
     static int DEVICE_ROW = 2;
 
@@ -73,15 +85,42 @@ public class DeviceProvider extends ContentProvider {
         }
 
         @Override
-        public void onUpgrade(SQLiteDatabase sqLiteDatabase, int i, int i1) {
+        public void onOpen(SQLiteDatabase sqLiteDatabase) {
+            System.out.println("Device table was created!");
+            sqLiteDatabase.execSQL("create table if not exists " + DB_TABLE + " " +
+                    "(_id INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                    "name TEXT NOT NULL, " +
+                    "quantity INTEGER NOT NULL, " +
+                    "typeId INTEGER NOT NULL)");
+        }
 
+        @Override
+        public void onUpgrade(SQLiteDatabase sqLiteDatabase, int i, int i1) {
+            sqLiteDatabase.execSQL("create table if not exists " + DB_TABLE + " " +
+                    "(_id INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                    "name TEXT NOT NULL, " +
+                    "quantity INTEGER NOT NULL, " +
+                    "typeId INTEGER NOT NULL)");
         }
     }
 
+    // Should be soft delete (update ACTIVE row from T to F)
+    // For the sake of the demo, this method will remove an entire row
     @Override
     public int delete(Uri uri, String selection, String[] selectionArgs) {
-        // Implement this to handle requests to delete one or more rows.
-        throw new UnsupportedOperationException("Not yet implemented");
+        int count = 0;
+        // GetPathSegments will return a List which is debunked from the uri
+        // At position 1 is the id within the uri
+        String id = uri.getPathSegments().get(1);
+        //TODO: explain this
+        count = myDB.delete(DB_TABLE,
+                KEY_ID
+                    + "="
+                    + id
+                    + (!TextUtils.isEmpty(selection) ? "AND ("
+                        + selection + ")" : ""), selectionArgs);
+        getContext().getContentResolver().notifyChange(uri, null);
+        return count;
     }
 
     @Override
@@ -119,6 +158,7 @@ public class DeviceProvider extends ContentProvider {
         }
     }
 
+    // Returns data
     // This method must return a cursor obj, or an Exception if fails
     /* Cursor class is an instance using which you can invoke methods that execute SQLite statements,
       fetch data from the result sets of the queries */
@@ -136,6 +176,7 @@ public class DeviceProvider extends ContentProvider {
         return cr;
     }
 
+    // Same ContentValues as insert
     @Override
     public int update(Uri uri, ContentValues values, String selection,
                       String[] selectionArgs) {

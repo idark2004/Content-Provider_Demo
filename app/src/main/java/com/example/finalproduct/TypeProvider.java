@@ -86,7 +86,6 @@ public class TypeProvider extends ContentProvider {
         // TODO: Implement this to initialize your content provider on startup.
         MyDatabase myHelper = new MyDatabase(getContext());
         myDB = myHelper.getWritableDatabase();
-//        System.out.println("Type--------------- " + myDB != null);
         if(myDB != null){
             return true;
         } else {
