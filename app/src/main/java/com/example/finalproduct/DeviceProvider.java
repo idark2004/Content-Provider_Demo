@@ -112,7 +112,12 @@ public class DeviceProvider extends ContentProvider {
         // GetPathSegments will return a List which is debunked from the uri
         // At position 1 is the id within the uri
         String id = uri.getPathSegments().get(1);
-        //TODO: explain this
+        /* update (Uri uri, ContentValues values, String selection, String[] selectionArgs
+            + uri: contains id
+            + values: set of column_name/value pairs to update
+            + selection: optional filter
+            + selectionArgs: may be null
+        */
         count = myDB.delete(DB_TABLE,
                 KEY_ID
                     + "="
@@ -134,7 +139,6 @@ public class DeviceProvider extends ContentProvider {
     @Override
     public Uri insert(Uri uri, ContentValues values) {
         long row = myDB.insert(DB_TABLE,null, values);
-        System.out.println(values);
         // Indicates that a new row has been added
         if (row > 0) {
             // Update the URI with the position number of the new row
@@ -180,7 +184,23 @@ public class DeviceProvider extends ContentProvider {
     @Override
     public int update(Uri uri, ContentValues values, String selection,
                       String[] selectionArgs) {
-        // TODO: Implement this to handle requests to update one or more rows.
-        throw new UnsupportedOperationException("Not yet implemented");
+        int count = 0;
+        // GetPathSegments will return a List which is debunked from the uri
+        // At position 1 is the id within the uri
+        String id = uri.getPathSegments().get(1);
+        System.out.println(KEY_ID
+                        + "="
+                        + id
+                        + (!TextUtils.isEmpty(selection) ? "AND ("
+                        + selection + ")" : ""));
+        // Explanation in the delete method
+        count = myDB.update(DB_TABLE, values,
+                KEY_ID
+                        + "="
+                        + id
+                        + (!TextUtils.isEmpty(selection) ? "AND ("
+                        + selection + ")" : ""), selectionArgs);
+        getContext().getContentResolver().notifyChange(uri, null);
+        return count;
     }
 }

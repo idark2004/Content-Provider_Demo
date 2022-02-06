@@ -2,13 +2,17 @@ package com.example.finalproduct;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.ContentUris;
+import android.content.ContentValues;
 import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -51,8 +55,9 @@ class Device {
 public class UpdateDeviceActivity extends AppCompatActivity {
     EditText newDeviceName, newDeviceQuantity;
     Spinner spDevice, spType;
-    Type selectedType;
+    Type newDeviceType;
     Device selectedDevice;
+    ContentValues values = new ContentValues();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -85,15 +90,14 @@ public class UpdateDeviceActivity extends AppCompatActivity {
             lstType.add(new Type(id, name));
         }
 
-        // When user pick a device, fields will appear with the current information of the device
-        // Load the device spinner
-        ArrayAdapter<Device> adapter = new ArrayAdapter(this, android.R.layout.simple_spinner_item, lstDevice);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spDevice.setAdapter(adapter);
-        spDevice.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        // Load the type spinner
+        ArrayAdapter<Type> typeAdapter = new ArrayAdapter(this, android.R.layout.simple_spinner_item, lstType);
+        typeAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spType.setAdapter(typeAdapter);
+        spType.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                selectedDevice = (Device) spDevice.getSelectedItem();
+                newDeviceType = (Type) spType.getSelectedItem();
             }
 
             @Override
@@ -101,10 +105,40 @@ public class UpdateDeviceActivity extends AppCompatActivity {
             }
         });
 
+        // Load the device spinner
+        ArrayAdapter<Device> deviceAdapter = new ArrayAdapter(this, android.R.layout.simple_spinner_item, lstDevice);
+        deviceAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spDevice.setAdapter(deviceAdapter);
+        spDevice.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                selectedDevice = (Device) spDevice.getSelectedItem();
+                // When user pick a device, fields will appear with the current information of the device
+                newDeviceName.setText(selectedDevice.getName());
+                newDeviceQuantity.setText(String.valueOf(selectedDevice.getQuantity()));
+                spType.setSelection(selectedDevice.getTypeId() - 1);
+//                for (int pos = 0; i<lstType.size(); i++) {
+//                    if (selectedDevice.getTypeId() == lstType.get(pos).getId()) {
+//                        spType.setSelection(pos);
+//                        return;
+//                    }
+//                }
+            }
 
-
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+            }
+        });
     }
 
     public void clickToUpdateDevice(View view) {
+//        values.put("_id", selectedDevice.getId());
+        values.put("name", newDeviceName.getText().toString());
+        values.put("quantity", newDeviceQuantity.getText().toString());
+        values.put("typeId", String.valueOf(newDeviceType.getId()));
+
+        Uri uri = ContentUris.withAppendedId(DeviceProvider.CONTENT_URI, selectedDevice.getId());
+        int count = getContentResolver().update(uri, values, null, null);
+        Toast.makeText(this, uri.toString(), Toast.LENGTH_LONG).show();
     }
 }
