@@ -25,11 +25,9 @@
         <provider
             android:name=".DeviceProvider"
             android:authorities="com.demo.device.provider"
-            android:grantUriPermissions="true"
             android:enabled="true"
             android:exported="true"
-            android:multiprocess="true"
-            android:readPermission="com.demo.device.PERMISSION"/>
+            android:multiprocess="true"/>
 
         <activity
             android:name=".ViewTypeActivity"
