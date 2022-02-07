@@ -25,8 +25,11 @@
         <provider
             android:name=".DeviceProvider"
             android:authorities="com.demo.device.provider"
+            android:grantUriPermissions="true"
             android:enabled="true"
-            android:exported="true" />
+            android:exported="true"
+            android:multiprocess="true"
+            android:readPermission="com.demo.device.PERMISSION"/>
 
         <activity
             android:name=".ViewTypeActivity"
@@ -37,7 +40,6 @@
             android:authorities="com.demo.contentprovider.provider"
             android:enabled="true"
             android:exported="true" />
-
         <activity
             android:name=".CreateTypeActivity"
             android:exported="false" />

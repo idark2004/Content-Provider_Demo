@@ -22,7 +22,6 @@ public class ViewDeviceActivity extends AppCompatActivity {
             String name = cr.getString(1);
             String quantity = cr.getString(2);
             String typeName = cr.getString(3);
-            System.out.println(name);
             stringBuilder.append(id + "  "+ name + " " + quantity + " " + typeName +"\n");
         }
         txtAllDevices.setText(stringBuilder.toString());

@@ -35,8 +35,8 @@ public class DeviceProvider extends ContentProvider {
     public static final Uri CONTENT_URI = Uri.parse("content://" +AUTHORITY+"/"+DB_TABLE);
 
     // These variables are for the declaration of the UriMatcher class var below
-    static int DEVICE = 1;
-    static int DEVICE_ROW = 2;
+    static final int DEVICE = 1;
+    static final int DEVICE_ROW = 2;
 
     /* Match the content URI when accessing the table inside the CP, thus provide
     the access of the CP */
@@ -128,11 +128,19 @@ public class DeviceProvider extends ContentProvider {
         return count;
     }
 
+
+    // Depends on the URI, different type of MIME will be returned
     @Override
     public String getType(Uri uri) {
-        // TODO: Implement this to handle requests for the MIME type of the data
-        // at the given URI.
-        throw new UnsupportedOperationException("Not yet implemented");
+        switch (myUri.match(uri)) {
+            case DEVICE:
+                return DeviceContract.MULTIPLE_RECORDS_MIME_TYPE;
+            case DEVICE_ROW:
+                return DeviceContract.SINGLE_RECORD_MIME_TYPE;
+            default:
+                // Another way is to throw an exception (recommend)
+                return null;
+        }
     }
 
     // Insert a new row
@@ -173,6 +181,9 @@ public class DeviceProvider extends ContentProvider {
         SQLiteQueryBuilder myQuery = new SQLiteQueryBuilder();
         myQuery.setTables(DB_TABLE);
 
+        if (myUri.match(uri) == DEVICE_ROW) {
+            myQuery.appendWhere(KEY_ID + "=" + uri.getPathSegments().get(1));
+        }
         /* By creating this cursor, you can use Cursor implemented methods
            to access the content of the database in Activities */
         Cursor cr = myQuery.query(myDB,null,null,null,null,null,"_id");
@@ -188,11 +199,6 @@ public class DeviceProvider extends ContentProvider {
         // GetPathSegments will return a List which is debunked from the uri
         // At position 1 is the id within the uri
         String id = uri.getPathSegments().get(1);
-        System.out.println(KEY_ID
-                        + "="
-                        + id
-                        + (!TextUtils.isEmpty(selection) ? "AND ("
-                        + selection + ")" : ""));
         // Explanation in the delete method
         count = myDB.update(DB_TABLE, values,
                 KEY_ID
