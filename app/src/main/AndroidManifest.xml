@@ -2,7 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.finalproduct">
     <uses-permission android:name="android.permission.READ_USER_DICTIONARY"/>
-    <permission android:name="DeviceProvider._READ_PERMISSION" />
+    <permission android:name=".DeviceProvider._READ_PERMISSION" />
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -28,8 +28,7 @@
             android:authorities="com.demo.device.provider"
             android:enabled="true"
             android:exported="true"
-            android:multiprocess="true"
-            android:readPermission="DeviceProvider._READ_PERMISSION"/>
+            android:multiprocess="true" />
         <activity
             android:name=".ViewTypeActivity"
             android:exported="false" />
