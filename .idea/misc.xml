@@ -3,6 +3,18 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/GitHub/Content-Provider_Demo/app/src/main/res/layout/activity_create_device.xml" value="0.16893115942028986" />
+        <entry key="..\:/GitHub/Content-Provider_Demo/app/src/main/res/layout/activity_create_type.xml" value="0.16893115942028986" />
+        <entry key="..\:/GitHub/Content-Provider_Demo/app/src/main/res/layout/activity_delete_device.xml" value="0.25" />
+        <entry key="..\:/GitHub/Content-Provider_Demo/app/src/main/res/layout/activity_main.xml" value="0.16893115942028986" />
+        <entry key="..\:/GitHub/Content-Provider_Demo/app/src/main/res/layout/activity_se1502_day08_notification.xml" value="0.2318840579710145" />
+        <entry key="..\:/GitHub/Content-Provider_Demo/app/src/main/res/layout/activity_type.xml" value="0.16893115942028986" />
+        <entry key="..\:/GitHub/Content-Provider_Demo/app/src/main/res/layout/activity_update_device.xml" value="0.25" />
+        <entry key="..\:/GitHub/Content-Provider_Demo/app/src/main/res/layout/activity_view_device.xml" value="0.16893115942028986" />
+        <entry key="..\:/GitHub/Content-Provider_Demo/app/src/main/res/layout/activity_view_type.xml" value="0.16893115942028986" />
+        <entry key="..\:/GitHub/Content-Provider_Demo/app/src/main/res/layout/fragment_device.xml" value="0.16893115942028986" />
+        <entry key="..\:/GitHub/Content-Provider_Demo/app/src/main/res/layout/fragment_device_delete.xml" value="0.25" />
+        <entry key="..\:/GitHub/Content-Provider_Demo/app/src/main/res/layout/fragment_type.xml" value="0.16893115942028986" />
         <entry key="..\:/fpt/semester_7/PRM392/projects/DemoP/FinalProduct/app/src/main/res/layout/activity_create_type.xml" value="0.12708333333333333" />
         <entry key="..\:/fpt/semester_7/PRM392/projects/DemoP/FinalProduct/app/src/main/res/layout/activity_main.xml" value="0.16168478260869565" />
         <entry key="..\:/fpt/semester_7/PRM392/projects/DemoP/FinalProduct/app/src/main/res/layout/activity_type.xml" value="0.12708333333333333" />

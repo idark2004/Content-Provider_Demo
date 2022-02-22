@@ -55,6 +55,13 @@ public class TypeProvider extends ContentProvider {
         public void onUpgrade(SQLiteDatabase sqLiteDatabase, int i, int i1) {
 
         }
+
+        @Override
+        public void onOpen(SQLiteDatabase sqLiteDatabase) {
+            sqLiteDatabase.execSQL("create table if not exists " + DB_TABLE + " " +
+                    "(_id INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                    "name TEXT NOT NULL)");
+        }
     }
 
     @Override

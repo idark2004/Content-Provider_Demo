@@ -40,8 +40,6 @@ public class DeviceProvider extends ContentProvider {
 
     /* Match the content URI when accessing the table inside the CP, thus provide
     the access of the CP */
-    /* Q: Why the UriMatcher has to be static?
-       A: The UriMatcher is not dependent on the class object to get initialized */
     static UriMatcher myUri = new UriMatcher(UriMatcher.NO_MATCH);
 
     /* These URIs are similar to APIs, by calling these you can perform multiple functions
@@ -69,26 +67,18 @@ public class DeviceProvider extends ContentProvider {
 
         @Override
         public void onCreate(SQLiteDatabase sqLiteDatabase) {
-            System.out.println("Device table was created!");
-            sqLiteDatabase.execSQL("create table if not exists " + DB_TABLE + " " +
-                    "(_id INTEGER PRIMARY KEY AUTOINCREMENT, " +
+            //query with "type" foreign key
+            sqLiteDatabase.execSQL("create table if not exists "+DB_TABLE+"" +
+                    " (_id INTEGER PRIMARY KEY AUTOINCREMENT, " +
                     "name TEXT NOT NULL, " +
                     "quantity INTEGER NOT NULL, " +
                     "typeId INTEGER NOT NULL)");
-
-            //query with "type" foreign key
-//            sqLiteDatabase.execSQL("create table if not exists "+DB_TABLE+"" +
-//                    " (_id INTEGER PRIMARY KEY AUTOINCREMENT, " +
-//                    "name TEXT NOT NULL, " +
-//                    "quantity INTEGER NOT NULL, " +
-//                    "FOREIGN KEY (typeId) REFERENCES type(id)");
         }
 
         @Override
         public void onOpen(SQLiteDatabase sqLiteDatabase) {
-            System.out.println("Device table was created!");
-            sqLiteDatabase.execSQL("create table if not exists " + DB_TABLE + " " +
-                    "(_id INTEGER PRIMARY KEY AUTOINCREMENT, " +
+            sqLiteDatabase.execSQL("create table if not exists "+DB_TABLE+"" +
+                    " (_id INTEGER PRIMARY KEY AUTOINCREMENT, " +
                     "name TEXT NOT NULL, " +
                     "quantity INTEGER NOT NULL, " +
                     "typeId INTEGER NOT NULL)");

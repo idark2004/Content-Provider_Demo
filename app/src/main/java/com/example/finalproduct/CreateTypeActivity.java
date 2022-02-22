@@ -23,7 +23,26 @@ public class CreateTypeActivity extends AppCompatActivity {
         typeProvider = new TypeProvider();
     }
 
+    public boolean isAvailable(String typeName) {
+        boolean result = true;
+        Cursor cr = getContentResolver().query(TypeProvider.CONTENT_URI, null, null, null, "_id");
+
+        while (cr.moveToNext()) {
+            if (cr.getString(1).equals(typeName)) {
+                result = false;
+                break;
+            }
+        }
+        return result;
+    }
+
     public void clickToSubmit(View view) {
+        // Check if selected name is available
+        String edtNameString = edtName.getText().toString();
+        if (!isAvailable(edtNameString)) {
+            Toast.makeText(this,"Already registered name. Please select another one!",Toast.LENGTH_SHORT).show();
+            return;
+        }
         values.put("name",edtName.getText().toString());
 
         Uri uri = getContentResolver().insert(typeProvider.CONTENT_URI,values);

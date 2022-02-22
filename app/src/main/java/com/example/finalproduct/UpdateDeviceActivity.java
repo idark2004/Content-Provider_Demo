@@ -14,6 +14,7 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import java.security.InvalidParameterException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -132,7 +133,21 @@ public class UpdateDeviceActivity extends AppCompatActivity {
     }
 
     public void clickToUpdateDevice(View view) {
-//        values.put("_id", selectedDevice.getId());
+        try {
+            if (selectedDevice == null) throw new InvalidParameterException();
+            // Check if device name is empty
+            String deviceName = newDeviceName.getText().toString().trim();
+            if (deviceName.isEmpty()) throw new NullPointerException();
+            // Check if the inputted quantity is a valid number
+            int deviceQuantity = Integer.parseInt(newDeviceQuantity.getText().toString());
+            if (deviceQuantity < 0) throw new NumberFormatException();
+        } catch (Exception ex) {
+            if (ex instanceof NumberFormatException) Toast.makeText(this, "Please input a valid quantity number!", Toast.LENGTH_SHORT).show();
+            if (ex instanceof NullPointerException) Toast.makeText(this, "Please input a device name!", Toast.LENGTH_SHORT).show();
+            if (ex instanceof InvalidParameterException) Toast.makeText(this, "Please select a device first!", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
         values.put("name", newDeviceName.getText().toString());
         values.put("quantity", newDeviceQuantity.getText().toString());
         values.put("typeId", String.valueOf(newDeviceType.getId()));

@@ -13,6 +13,7 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import java.security.InvalidParameterException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -40,7 +41,7 @@ public class CreateDeviceActivity extends AppCompatActivity {
     Spinner spDeviceType;
     ContentValues values = new ContentValues();
     Type selectedType;
-    int selectedTypeId;
+    int selectedTypeId = -1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -81,7 +82,23 @@ public class CreateDeviceActivity extends AppCompatActivity {
     }
 
     public void clickToInsertDevice(View view) {
-        values.put("name", edtDeviceName.getText().toString());
+        try {
+            // Should have made some custom exceptions/write a method to validate these fields here, but I'm lazy af xd
+            // Check if device name is empty
+            String deviceName = edtDeviceName.getText().toString().trim();
+            if (deviceName.isEmpty()) throw new NullPointerException();
+            // Check if the inputted quantity is a valid number
+            int deviceQuantity = Integer.parseInt(edtDeviceQuantity.getText().toString());
+            if (deviceQuantity < 0) throw new NumberFormatException();
+            if (selectedTypeId < 0) throw new InvalidParameterException();
+        } catch (Exception ex) {
+            if (ex instanceof NumberFormatException) Toast.makeText(this, "Please input a valid quantity number!", Toast.LENGTH_SHORT).show();
+            if (ex instanceof NullPointerException) Toast.makeText(this, "Please input a device name!", Toast.LENGTH_SHORT).show();
+            if (ex instanceof InvalidParameterException) Toast.makeText(this, "Please select a type!", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        values.put("name", edtDeviceName.getText().toString().trim());
         values.put("quantity", edtDeviceQuantity.getText().toString());
         values.put("typeId", selectedTypeId);
 

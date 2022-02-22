@@ -15,14 +15,17 @@ public class ViewDeviceActivity extends AppCompatActivity {
         setContentView(R.layout.activity_view_device);
         txtAllDevices = findViewById(R.id.txtAllDevices);
         Cursor cr = getContentResolver().query(DeviceProvider.CONTENT_URI,null,null,null,"_id");
-        StringBuilder stringBuilder = new StringBuilder();
+        StringBuilder stringBuilder = new StringBuilder().append("Empty list :(");
 
-        while(cr.moveToNext()){
-            int id = cr.getInt(0);
-            String name = cr.getString(1);
-            String quantity = cr.getString(2);
-            String typeName = cr.getString(3);
-            stringBuilder.append(id + "  "+ name + " " + quantity + " " + typeName +"\n");
+        if (cr != null && cr.getCount() > 0) {
+            stringBuilder = new StringBuilder();
+            while (cr.moveToNext()) {
+                int id = cr.getInt(0);
+                String name = cr.getString(1);
+                String quantity = cr.getString(2);
+                int typeId = cr.getInt(3);
+                stringBuilder.append(id + "  " + name + " " + quantity + " " + typeId + "\n");
+            }
         }
         txtAllDevices.setText(stringBuilder.toString());
     }
